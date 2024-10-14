@@ -14,7 +14,7 @@ def process_emails(directory):
     for category in ['20030228_easy_ham', '20030228_easy_ham_2', '20030228_hard_ham', '20030228_spam', '20050311_spam_2']:
         label = 'ham' if 'ham' in category else 'spam'
         category_path = os.path.join(directory, category)
-        file_pattern = os.path.join(category_path, '**', '[0-9]*.*')
+        file_pattern = os.path.join(category_path, '**', '[0-9]*.*')  #编号
         
         for file_path in glob.glob(file_pattern, recursive=True):
             email_content = read_email(file_path)
