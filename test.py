@@ -41,13 +41,13 @@ def read_file(file_path):
 
 
 if __name__ == '__main__':
-    model_path = './model_weights.pth'  # 你保存的模型权重文件
+    model_path = 'E://github_project//model_weights.pth'  # 你保存的模型权重文件
     device = torch.device('cpu')
     # 加载模型
     model = load_model(model_path, device)
     
     # 加载 BERT 预训练的 tokenizer
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased',max_length=128)
+    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased',max_length=2100)
     # 提示用户输入要处理的文件夹路径
     folder_path = input("请输入要处理的文件夹路径：")
     # 初始化统计变量
@@ -84,7 +84,7 @@ if __name__ == '__main__':
                     print(f"预测结果: 正常邮件 (Ham)")
                 sum_count+=1
                 print(f"处理的了第{sum_count}封\n")
-                time.sleep(0.5)
+                time.sleep(0.2)
                 # print(f"垃圾邮件概率: {probability:.4f}\n")
 
         # 输出最终统计结果
