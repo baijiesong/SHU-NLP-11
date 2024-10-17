@@ -65,11 +65,11 @@ if __name__ == '__main__':
 
         # 根据预测类别判断是 Ham 还是 Spam
         if pred_class == 0:
-            predictions.append("Ham")
-            print(f"预测结果: 正常邮件 (Ham)")
-        else:
             predictions.append("Spam")
             print(f"预测结果: 垃圾邮件 (Spam)")
+        else:
+            predictions.append("Spam")
+            print(f"预测结果: 正常邮件 (Ham)")
         # 比较预测结果与真实标签，增加 success 计数
         print(f"正确结果：{labels[i]}")
         if pred_class != true_labels[i]:
