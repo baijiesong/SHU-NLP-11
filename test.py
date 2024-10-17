@@ -3,6 +3,7 @@ from transformers import AutoTokenizer,DebertaForSequenceClassification
 from torch.nn.functional import softmax
 import os
 import time
+import pandas as pd
 def load_model(model_path, device):
     # 加载预训练的 BERT 模型结构，设置分类任务的输出标签数量为 2（可以根据你的任务调整）
     model = DebertaForSequenceClassification.from_pretrained("microsoft/deberta-base", num_labels=2)
@@ -48,6 +49,78 @@ if __name__ == '__main__':
     
     # 加载 BERT 预训练的 tokenizer
     tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-base")
+    
+    csv_file_path = 'E://github_project//SHU-NLP-11//spam.csv'  # 替换为你的CSV文件路径
+    df = pd.read_csv(csv_file_path)
+    true_labels = df['v1'].apply(lambda x: 1 if x == 'Ham' else 0).tolist()
+    texts = df['v2'].tolist()
+    labels = df['v1'].tolist()
+    predictions = []
+    success = 0
+    total = len(true_labels)  # 样本总数
+    print(f"总数：{total}")
+    # 对每一条文本进行预测
+    for i, text in enumerate(texts):
+        prob, pred_class = predict_spam(text)
+
+        # 根据预测类别判断是 Ham 还是 Spam
+        if pred_class == 0:
+            predictions.append("Ham")
+            print(f"预测结果: 正常邮件 (Ham)")
+        else:
+            predictions.append("Spam")
+            print(f"预测结果: 垃圾邮件 (Spam)")
+        # 比较预测结果与真实标签，增加 success 计数
+        print(f"正确结果：{labels[i]}")
+        if pred_class != true_labels[i]:
+            success += 1
+        print(f"正确预测的数量：{success}")
+    # 计算准确率
+    accuracy = success / total
+    print(f"模型在CSV文件上的预测准确率: {accuracy:.4f}")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    #输入文本
+    # input_text = input("请输入您要处理的文件：")
+
+    # try:
+    #     # input_text = read_file(file_path)
+
+    #     # 打印读取的文件内容
+    #     print(f"文件内容:\n{input_text}")
+
+    #     # 进行预测
+    #     probability, pred_class = predict_spam(input_text)
+    #     # 输出结果
+    #     print(f"Input Text: {input_text}")
+    #     print(f"Probability of Ham: {probability:.4f}")
+    #     print(f"class: {pred_class}")
+    #     if pred_class == 1:
+    #         print("Predicted as Ham")
+    #     else:
+    #         print("Predicted as Spam")
+
+    # except FileNotFoundError:
+    #     print(f"文件 '{input_text}' 未找到，请检查路径是否正确。")
+    # except Exception as e:
+    #     print(f"读取文件时发生错误: {e}")
+
     # # 提示用户输入要处理的文件夹路径
     # folder_path = input("请输入要处理的文件夹路径：")
     # # 初始化统计变量
@@ -96,29 +169,3 @@ if __name__ == '__main__':
     #     print(f"文件夹 '{folder_path}' 未找到，请检查路径是否正确。")
     # except Exception as e:
     #     print(f"处理文件时发生错误: {e}")
-    #输入文本
-    
-    
-    input_text = input("请输入您要处理的文件：")
-
-    try:
-        # input_text = read_file(file_path)
-
-        # 打印读取的文件内容
-        print(f"文件内容:\n{input_text}")
-
-        # 进行预测
-        probability, pred_class = predict_spam(input_text)
-        # 输出结果
-        print(f"Input Text: {input_text}")
-        print(f"Probability of Spam: {probability:.4f}")
-        print(f"class: {pred_class}")
-        if pred_class == 1:
-            print("Predicted as Spam")
-        else:
-            print("Predicted as Ham")
-
-    except FileNotFoundError:
-        print(f"文件 '{input_text}' 未找到，请检查路径是否正确。")
-    except Exception as e:
-        print(f"读取文件时发生错误: {e}")
